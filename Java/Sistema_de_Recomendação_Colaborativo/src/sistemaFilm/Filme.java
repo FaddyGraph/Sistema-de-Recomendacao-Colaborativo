@@ -15,23 +15,11 @@ public class Filme {
 		if (id < 0) {
 	        throw new IllegalArgumentException("ID não pode ser negativo.");
 	    }
-	    if (titulo == null || titulo.isBlank()) {
-	        throw new IllegalArgumentException("Título é obrigatório.");
-	    }
-	    if (generos == null || generos.isBlank()) {
-	    	throw new IllegalArgumentException("Genero é obrigatório.");
-	    }
-	    if (diretor == null || diretor.isBlank()) {
-	        throw new IllegalArgumentException("Diretor é obrigatório.");
-	    }
-	    if (ano < 1888) { // O primeiro filme da história é de 1888
-	        throw new IllegalArgumentException("Ano de lançamento inválido.");
-	    }
-	    
 		this.id = id;
-		this.titulo = titulo;
-		this.generos = generos;
-		this.ano = ano;
+		setTitulo(titulo);
+		setGeneros(generos);
+		setDiretor(diretor);
+		setAno(ano);
 	}
 
 	//Getters e Setters
