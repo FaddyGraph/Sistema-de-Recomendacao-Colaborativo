@@ -1,12 +1,13 @@
 package sistemaFilm;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Filme {
 
 	private long id; //fornecido pelo usuario
 	private String titulo;
-	private String generos; //pegar a linha toda ou é melhor fazer em array ?
+	private String[] generos; 
 	private String diretor;
 	private int ano;
 	
@@ -34,7 +35,7 @@ public class Filme {
 		this.titulo = titulo;
 	}
 
-	public String getGeneros() {
+	public String[] getGeneros() {
 		return generos;
 	}
 
@@ -42,7 +43,7 @@ public class Filme {
 		if (generos == null || generos.isBlank()) {
 	    	throw new IllegalArgumentException("Genero é obrigatório.");
 	    }
-		this.generos = generos;
+		this.generos = generos.split(";");
 	}
 
 	public String getDiretor() {
@@ -74,7 +75,7 @@ public class Filme {
 	//hash & equals (estudar + sobre)
 	@Override
 	public int hashCode() {
-		return Objects.hash(ano, diretor, generos, id, titulo);
+		return Objects.hash(id, titulo);
 	}
 
 	@Override
@@ -93,7 +94,7 @@ public class Filme {
 	// toString
 	@Override
 	public String toString() {
-		return "Filme [id=" + id + ", titulo=" + titulo + ", generos=" + generos + ", diretor=" + diretor + ", ano="
+		return "Filme [id= " + id + ", titulo= " + titulo + ", generos= " + Arrays.toString(generos) + ", diretor= " + diretor + ", ano= "
 				+ ano + "]";
 	}	
 	
