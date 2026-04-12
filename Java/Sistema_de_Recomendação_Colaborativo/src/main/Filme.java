@@ -1,6 +1,5 @@
-package sistemaFilm;
+package main;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 public class Filme {
@@ -94,8 +93,9 @@ public class Filme {
 	// toString
 	@Override
 	public String toString() {
-		return "Filme [id= " + id + ", titulo= " + titulo + ", generos= " + Arrays.toString(generos) + ", diretor= " + diretor + ", ano= "
-				+ ano + "]";
+		String generosFormatados = String.join(";", generos);
+		return id + "," + titulo + "," + generosFormatados + "," + diretor + ","
+				+ ano;
 	}	
 	
 }

@@ -1,4 +1,4 @@
-package sistemaFilm;
+package main;
 
 import java.util.Objects;
 
@@ -10,7 +10,7 @@ public class Avaliacao {
 	public Avaliacao(long usuario, long id_filme, int nota) {
 		setUsuario(usuario);
 		setId_filme(id_filme);
-		setUsuario(usuario);
+		setNota(nota);;
 	}
 
 	public long getUsuario() {
@@ -45,6 +45,7 @@ public class Avaliacao {
 	    this.nota = nota;
 	}
 
+	//hash & equals (estudar + sobre)
 	@Override
 	public int hashCode() {
 		return Objects.hash(usuario);
@@ -64,7 +65,7 @@ public class Avaliacao {
 
 	@Override
 	public String toString() {
-		return "avaliacao [usuario= " + usuario + ", id_filme= " + id_filme + ", nota= " + nota + "]";
+		return usuario + "," + id_filme + "," + nota;
 	}
 	
 }
