@@ -1,4 +1,3 @@
-package main;
 
 public enum Comandos {
 	SAIR("SAIR"),
@@ -7,7 +6,8 @@ public enum Comandos {
 	ANO_SUPERIOR("ANO_SUPERIOR"),
 	MEDIA_AVALIACOES("MEDIA_AVALIACOES"),
 	NAO_AVALIADOS("NAO_AVALIADOS"),
-	DIRETORES_COMUNS("DIRETORES_COMUNS");
+	DIRETORES_COMUNS("DIRETORES_COMUNS"),
+	HATER("HATER");
 
 	private String comandoString;
 

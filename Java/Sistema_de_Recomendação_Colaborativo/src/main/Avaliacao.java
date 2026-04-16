@@ -1,4 +1,4 @@
-package main;
+
 
 import java.util.Objects;
 
@@ -48,7 +48,7 @@ public class Avaliacao {
 	//hash & equals (estudar + sobre)
 	@Override
 	public int hashCode() {
-		return Objects.hash(usuario);
+		return Objects.hash(usuario, id_filme, nota);
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package main;
+
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -9,6 +9,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -20,7 +22,6 @@ public class SistemaPrincipal {
 
 	// HashMaps
 	private HashMap<Long, Filme> mapFilmes = new HashMap<>();
-	private HashMap<String, Filme> mapfilmeTitulo = new HashMap<>();
 	private HashMap<String, ArrayList<Filme>> mapfilmesPorGenero = new HashMap<>();
 
 	private HashMap<Long, ArrayList<Avaliacao>> mapAvaliPorUsuario = new HashMap<>();
@@ -59,6 +60,30 @@ public class SistemaPrincipal {
 					}
 					break;
 				}
+				case MEDIA_AVALIACOES: {
+					if (comandoString.length > 1) {
+						mediaAvaliacoesUsuario(Long.parseLong(comandoString[1]));
+					}
+					break;
+				}
+				case NAO_AVALIADOS: {
+					if (comandoString.length > 1) {
+						listarFilmesNAvaliados(Long.parseLong(comandoString[1]));
+					}
+					break;
+				}
+				case HATER: {
+					if (comandoString.length > 1) {
+						usuarioHATER(Long.parseLong(comandoString[1]));
+					}
+					break;
+				}
+				case DIRETORES_COMUNS: {
+					if (comandoString.length > 2) {
+						ListarFilmesDirectCo(Long.parseLong(comandoString[1]), Long.parseLong(comandoString[2]));
+					}
+					break;
+				}
 				case SAIR: {
 					return;
 				}
@@ -78,11 +103,11 @@ public class SistemaPrincipal {
 		}
 	}
 
-	public void mapearFilmTitulo() {
-		for (Filme filme : filmes) {
-			mapfilmeTitulo.put(filme.getTitulo(), filme);
-		}
-	}
+//	public void mapearFilmTitulo() {
+//		for (Filme filme : filmes) {
+//			mapfilmeTitulo.put(filme.getTitulo(), filme);
+//		}
+//	}
 
 	public void mapearFilmGeneros() {
 		for (Filme f : filmes) {
@@ -107,17 +132,17 @@ public class SistemaPrincipal {
 		}
 	}
 
-	public void listarTodosFilmes() {
-		System.out.println("___________________________________________");
-		System.out.println("Filmes: ");
-		if (filmes == null) {
-			System.out.println("-- Nenhum filme Cadastrado --");
-			return;
-		}
-		for (int i = 0; i < filmes.size(); i++) {
-			System.out.println(filmes.get(i).toString());
-		}
-	}
+//	public void listarTodosFilmes() {
+//		System.out.println("___________________________________________");
+//		System.out.println("Filmes: ");
+//		if (filmes == null) {
+//			System.out.println("-- Nenhum filme Cadastrado --");
+//			return;
+//		}
+//		for (int i = 0; i < filmes.size(); i++) {
+//			System.out.println(filmes.get(i).toString());
+//		}
+//	}
 
 	public void listarFilmePorGenero(String generoAlvo) {
 		ArrayList<Filme> listaFiltrada = mapfilmesPorGenero.get(generoAlvo);
@@ -140,41 +165,109 @@ public class SistemaPrincipal {
 				.forEach(f -> System.out.println("- "+f.getTitulo())); // printa o titulo
 	}
 
-	public void BuscarFilmePorTitulo(String titulo) {
-		Filme filmeEncontrado = mapfilmeTitulo.get(titulo);
+//	public void BuscarFilmePorTitulo(String titulo) {
+//		Filme filmeEncontrado = mapfilmeTitulo.get(titulo);
+//
+//		if (filmeEncontrado != null) {
+//			System.out.println("___________________________________________");
+//			System.out.println("- Filme: " + filmeEncontrado + " :");
+//			System.out.println(filmeEncontrado.toString());
+//
+//		} else {
+//			System.out.println("-- Nenhum filme com titulo : " + titulo);
+//		}
+//	}
 
-		if (filmeEncontrado != null) {
-			System.out.println("___________________________________________");
-			System.out.println("- Filme: " + filmeEncontrado + " :");
-			System.out.println(filmeEncontrado.toString());
+//	public void listarTodasAvaliacoes() {
+//		System.out.println("___________________________________________");
+//		System.out.println("Avaliacoes: ");
+//		if (avaliacoes == null) {
+//			System.out.println("-- Nenhuma avaliação Cadastrada ");
+//		}
+//		for (int i = 0; i < avaliacoes.size(); i++) {
+//			System.out.println(avaliacoes.get(i).toString());
+//		}
+//	}
 
-		} else {
-			System.out.println("-- Nenhum filme com titulo : " + titulo);
-		}
-	}
-
-	public void listarTodasAvaliacoes() {
-		System.out.println("___________________________________________");
-		System.out.println("Avaliacoes: ");
-		if (avaliacoes == null) {
-			System.out.println("-- Nenhuma avaliação Cadastrada ");
-		}
-		for (int i = 0; i < avaliacoes.size(); i++) {
-			System.out.println(avaliacoes.get(i).toString());
-		}
-	}
-
-	public void listarAvaliacoesUsuario(Long usuario) {
+	public void mediaAvaliacoesUsuario(Long usuario) {
 		ArrayList<Avaliacao> avaliacoesUsua = mapAvaliPorUsuario.get(usuario);
 
+		System.out.println("--- MEDIA_AVALIACOES " + usuario + " ---");
 		if (avaliacoesUsua != null) {
-			System.out.println("___________________________________________");
-			System.out.println("- Avaliações do usuário: " + usuario + " :");
-			for (Avaliacao avaliacao : avaliacoesUsua)
-				System.out.println(avaliacao.toString());
+			
+			int numAvali =0 ;
+			double somaAvali =0 ;
+			for (Avaliacao avaliacao : avaliacoesUsua) {
+				numAvali++;
+				somaAvali+= avaliacao.getNota();
+			}
+			System.out.printf(Locale.US,"%.2f\n",(somaAvali/numAvali));
+		}else {
+			System.out.println("0.00");			
+		}
+	}
+	
+	public void listarFilmesNAvaliados(Long usuario) {
+		System.out.println("--- NAO_AVALIADOS "+ usuario+" ---");
+		Set<Long> idsAvaliados = avaliacoes.stream()
+		        .filter(a -> a.getUsuario() == usuario) // Filtra só as notas desse user
+		        .map(Avaliacao::getId_filme)            
+		        .collect(Collectors.toSet());
+		
+	    filmes.stream()
+	    .filter(f -> !idsAvaliados.contains(f.getId())) //se nao tiver em idsAvaliados
+	    .sorted(Comparator.comparing(Filme::getTitulo))
+	    .forEach(f -> System.out.println("- "+ f.getTitulo()));
+		
+	}
+	
+	public void ListarFilmesDirectCo(Long usuario1,Long usuario2) {
+		
+		System.out.println("--- DIRETORES_COMUNS "+usuario1+" "+usuario2+ " ---");
+		
+	    Set<Long> vistosUsu1 = avaliacoes.stream()
+	            .filter(a -> a.getUsuario() == usuario1)
+	            .map(Avaliacao::getId_filme)
+	            .collect(Collectors.toSet());
 
-		} else {
-			System.out.println("-- Nenhuma avaliações do usuário : " + usuario);
+	    Set<String> diretoresVistosUsu1 = filmes.stream()
+	            .filter(f -> vistosUsu1.contains(f.getId()))
+	            .map(Filme::getDiretor)
+	            .collect(Collectors.toSet()); // O Set já remove duplicatas aqui
+
+	    Set<Long> vistosUsu2 = avaliacoes.stream()
+	            .filter(a -> a.getUsuario() == usuario2)
+	            .map(Avaliacao::getId_filme)
+	            .collect(Collectors.toSet());
+
+	    
+	    filmes.stream()
+	        .filter(f -> vistosUsu2.contains(f.getId()))      // Filmes que usuario 2  viu
+	        .map(Filme::getDiretor)                            // Transforma o pesquisa de Filmes para Diretor 
+	        .filter(diretoresVistosUsu1::contains)          // mantem só se o usuario 1 tambem viu esse diretor
+	        .distinct()                                        // remove nomes repetidos no fluxo
+	        .sorted()                                          
+	        .forEach(diretor -> System.out.println("- " + diretor));
+	}
+	
+	public void usuarioHATER(long usuario) {
+		System.out.println("--- HATER "+ usuario +" ---");
+		ArrayList<Integer> notas = new ArrayList<Integer>();
+				avaliacoes.stream()
+		        .filter(a -> a.getUsuario() == usuario) // Filtra só as notas desse user           
+		        .forEach(a -> notas.add(a.getNota()));
+				int resposta = 0;
+		for(int n : notas) {
+			if (n==5) {
+				resposta++;
+			}else if (n<=1) {
+				resposta--;
+			}
+		}
+		if (resposta>=0) {
+			System.out.println("Nao");
+		}else {
+			System.out.println("Sim");
 		}
 	}
 
@@ -216,35 +309,37 @@ public class SistemaPrincipal {
 				throw new RuntimeException(e);
 			}
 		}).limit(n) // A "seta" acima gera as linhas, e o limit(n) diz quantas queremos
-				.collect(Collectors.toCollection(ArrayList::new)); // Transforma em ArrayList
+		  .collect(Collectors.toCollection(ArrayList::new)); // Transforma em ArrayList
 	}
 
-	public void carregarDados(ArrayList<String> conteudoF, ArrayList<String> conteudoA) {
+	public void carregarDados(ArrayList<String> conteudoFilme, ArrayList<String> conteudoAvaliacao) {
 
-		if (conteudoF != null) {
-			for (int i = 0; i < conteudoF.size(); i++) {
-				if (i == 0 && conteudoF.get(0).equals("id,titulo,generos,diretor,ano")) {
+		if (conteudoFilme != null) {
+			for (int i = 0; i < conteudoFilme.size(); i++) {
+				if (i == 0 && conteudoFilme.get(0).equals("id,titulo,generos,diretor,ano")) {
 					continue;
 				}
-				String[] itens = conteudoF.get(i).split(",");
+				String[] itens = conteudoFilme.get(i).split(",");
 
 				Filme novoFilme = new Filme(Long.parseLong(itens[0]), itens[1], itens[2], itens[3],
 						Integer.parseInt(itens[4]));
+				
 				filmes.add(novoFilme);
 			}
 			mapearFilmesID();
 			mapearFilmGeneros();
-			mapearFilmTitulo();
+			//mapearFilmTitulo();
 		}
-		if (conteudoA != null) {
-			for (int i = 0; i < conteudoA.size(); i++) {
-				if (i == 0 && conteudoA.get(0).equals("usuario,id_filme,nota")) {
+		if (conteudoAvaliacao != null) {
+			for (int i = 0; i < conteudoAvaliacao.size(); i++) {
+				if (i == 0 && conteudoAvaliacao.get(0).equals("usuario,id_filme,nota")) {
 					continue;
 				}
-				String[] itens = conteudoA.get(i).split(",");
+				String[] itens = conteudoAvaliacao.get(i).split(",");
 
 				Avaliacao novaAvaliacao = new Avaliacao(Long.parseLong(itens[0]), Long.parseLong(itens[1]),
 						Integer.parseInt(itens[2]));
+				
 				avaliacoes.add(novaAvaliacao);
 			}
 			mapearAvaliUsuario();
