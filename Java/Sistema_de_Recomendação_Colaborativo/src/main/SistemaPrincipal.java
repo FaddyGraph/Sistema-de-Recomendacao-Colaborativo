@@ -1,3 +1,5 @@
+package main;
+
 
 
 import java.io.BufferedReader;
@@ -33,7 +35,7 @@ public class SistemaPrincipal {
 
 	public void main() {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		//lerDadosPArquivo("src/dados/filmes.csv", "src/dados/avaliacoes.csv");
+		//lerDadosPArquivo("", ""); //Ex: "src/dados/filmes.csv" , "src/dados/avaliacoes.csv"
 		lerDadosPSistemIn(br);
 
 		String linha;
