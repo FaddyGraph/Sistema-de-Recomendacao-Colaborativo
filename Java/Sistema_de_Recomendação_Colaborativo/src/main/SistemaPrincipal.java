@@ -1,7 +1,6 @@
 package main;
 
 
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -11,13 +10,14 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SistemaPrincipal {
-	// BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 	private ArrayList<Filme> filmes = new ArrayList<Filme>();
 	private ArrayList<Avaliacao> avaliacoes = new ArrayList<Avaliacao>();
@@ -25,26 +25,26 @@ public class SistemaPrincipal {
 	// HashMaps
 	private HashMap<Long, Filme> mapFilmes = new HashMap<>();
 	private HashMap<String, ArrayList<Filme>> mapfilmesPorGenero = new HashMap<>();
-
 	private HashMap<Long, ArrayList<Avaliacao>> mapAvaliPorUsuario = new HashMap<>();
 
 	// Enums
 	Comandos comando;
 
-	// Constantes para formatação
-
 	public void main() {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		//lerDadosPArquivo("", ""); //Ex: "src/dados/filmes.csv" , "src/dados/avaliacoes.csv"
+		// lerDadosPArquivo("D://CEFET/CLP/Sistema-de-Recomendacao-Colaborativo/data/filmes.csv",
+		// "D:/CEFET/CLP/Sistema-de-Recomendacao-Colaborativo/data/avaliacoes.csv" );
+		// //Ex: "src/dados/filmes.csv" , "src/dados/avaliacoes.csv"
 		lerDadosPSistemIn(br);
 
 		String linha;
 
 		try {
 			while ((linha = br.readLine()) != null) {
-	            linha = linha.trim();
-	            if (linha.isEmpty()) continue;
-	            
+				linha = linha.trim();
+				if (linha.isEmpty())
+					continue;
+
 				String comandoString[] = linha.split(" ");
 
 				comando = Comandos.deString(comandoString[0].toUpperCase());
@@ -151,9 +151,9 @@ public class SistemaPrincipal {
 
 		System.out.println("--- GENERO " + generoAlvo + " ---");
 		if (listaFiltrada != null) {
-			listaFiltrada.sort(Comparator.comparing(Filme::getTitulo)); //ardenar por titulo
+			listaFiltrada.sort(Comparator.comparing(Filme::getTitulo)); // ardenar por titulo
 			for (Filme f : listaFiltrada) {
-				System.out.println("- "+f.getTitulo());
+				System.out.println("- " + f.getTitulo());
 			}
 		}
 	}
@@ -162,9 +162,9 @@ public class SistemaPrincipal {
 		System.out.println("--- ANO_SUPERIOR " + anoCorte + " ---");
 
 		filmes.stream().filter(f -> f.getAno() > anoCorte) // compara cada filme com o ano de corte
-				.sorted((Comparator.comparing(Filme::getAno, Comparator.reverseOrder()))// ordenar do mior para o menor
+				.sorted((Comparator.comparing(Filme::getAno, Comparator.reverseOrder()))// ordenar do maior para o menor
 						.thenComparing(Filme::getTitulo)) // o que sobrou é ordenado por titulo
-				.forEach(f -> System.out.println("- "+f.getTitulo())); // printa o titulo
+				.forEach(f -> System.out.println("- " + f.getTitulo())); // printa o titulo
 	}
 
 //	public void BuscarFilmePorTitulo(String titulo) {
@@ -196,81 +196,66 @@ public class SistemaPrincipal {
 
 		System.out.println("--- MEDIA_AVALIACOES " + usuario + " ---");
 		if (avaliacoesUsua != null) {
-			
-			int numAvali =0 ;
-			double somaAvali =0 ;
+
+			long numAvali = 0;
+			double somaAvali = 0;
+
 			for (Avaliacao avaliacao : avaliacoesUsua) {
 				numAvali++;
-				somaAvali+= avaliacao.getNota();
+				somaAvali += avaliacao.getNota();
 			}
-			System.out.printf(Locale.US,"%.2f\n",(somaAvali/numAvali));
-		}else {
-			System.out.println("0.00");			
+			System.out.printf(Locale.US, "%.2f\n", (somaAvali / numAvali));
+		} else {
+			System.out.println("0.00");
 		}
 	}
-	
+
 	public void listarFilmesNAvaliados(Long usuario) {
-		System.out.println("--- NAO_AVALIADOS "+ usuario+" ---");
-		Set<Long> idsAvaliados = avaliacoes.stream()
-		        .filter(a -> a.getUsuario() == usuario) // Filtra só as notas desse user
-		        .map(Avaliacao::getId_filme)            
-		        .collect(Collectors.toSet());
-		
-	    filmes.stream()
-	    .filter(f -> !idsAvaliados.contains(f.getId())) //se nao tiver em idsAvaliados
-	    .sorted(Comparator.comparing(Filme::getTitulo))
-	    .forEach(f -> System.out.println("- "+ f.getTitulo()));
-		
+		System.out.println("--- NAO_AVALIADOS " + usuario + " ---");
+		Set<Long> idsAvaliados = avaliacoes.stream().filter(a -> a.getUsuario() == usuario) // Filtra só as notas desse
+																							// user
+				.map(Avaliacao::getId_filme).collect(Collectors.toSet());
+
+		filmes.stream().filter(f -> !idsAvaliados.contains(f.getId())) // se nao tiver em idsAvaliados
+				.sorted(Comparator.comparing(Filme::getTitulo)).forEach(f -> System.out.println("- " + f.getTitulo()));
+
 	}
-	
-	public void ListarFilmesDirectCo(Long usuario1,Long usuario2) {
-		
-		System.out.println("--- DIRETORES_COMUNS "+usuario1+" "+usuario2+ " ---");
-		
-	    Set<Long> vistosUsu1 = avaliacoes.stream()
-	            .filter(a -> a.getUsuario() == usuario1)
-	            .map(Avaliacao::getId_filme)
-	            .collect(Collectors.toSet());
 
-	    Set<String> diretoresVistosUsu1 = filmes.stream()
-	            .filter(f -> vistosUsu1.contains(f.getId()))
-	            .map(Filme::getDiretor)
-	            .collect(Collectors.toSet()); // O Set já remove duplicatas aqui
+	public void ListarFilmesDirectCo(Long usuario1, Long usuario2) {
 
-	    Set<Long> vistosUsu2 = avaliacoes.stream()
-	            .filter(a -> a.getUsuario() == usuario2)
-	            .map(Avaliacao::getId_filme)
-	            .collect(Collectors.toSet());
+		System.out.println("--- DIRETORES_COMUNS " + usuario1 + " " + usuario2 + " ---");
 
-	    
-	    filmes.stream()
-	        .filter(f -> vistosUsu2.contains(f.getId()))      // Filmes que usuario 2  viu
-	        .map(Filme::getDiretor)                            // Transforma o pesquisa de Filmes para Diretor 
-	        .filter(diretoresVistosUsu1::contains)          // mantem só se o usuario 1 tambem viu esse diretor
-	        .distinct()                                        // remove nomes repetidos no fluxo
-	        .sorted()                                          
-	        .forEach(diretor -> System.out.println("- " + diretor));
+		Set<Long> vistosUsu1 = avaliacoes.stream().filter(a -> a.getUsuario() == usuario1).map(Avaliacao::getId_filme)
+				.collect(Collectors.toSet());
+
+		Set<String> diretoresVistosUsu1 = filmes.stream().filter(f -> vistosUsu1.contains(f.getId()))
+				.map(Filme::getDiretor).collect(Collectors.toSet()); // O Set já remove duplicatas aqui
+
+		Set<Long> vistosUsu2 = avaliacoes.stream().filter(a -> a.getUsuario() == usuario2).map(Avaliacao::getId_filme)
+				.collect(Collectors.toSet());
+
+		filmes.stream().filter(f -> vistosUsu2.contains(f.getId())) // Filmes que usuario 2 viu
+				.map(Filme::getDiretor) // Transforma o pesquisa de Filmes para Diretor
+				.filter(diretoresVistosUsu1::contains) // mantem só se o usuario 1 tambem viu esse diretor
+				.distinct() // remove nomes repetidos no fluxo
+				.sorted().forEach(diretor -> System.out.println("- " + diretor));
 	}
-	
+
 	public void usuarioHATER(long usuario) {
-		System.out.println("--- HATER "+ usuario +" ---");
-		ArrayList<Integer> notas = new ArrayList<Integer>();
-				avaliacoes.stream()
-		        .filter(a -> a.getUsuario() == usuario) // Filtra só as notas desse user           
-		        .forEach(a -> notas.add(a.getNota()));
-				int resposta = 0;
-		for(int n : notas) {
-			if (n==5) {
-				resposta++;
-			}else if (n<=1) {
-				resposta--;
-			}
-		}
-		if (resposta>=0) {
+		System.out.println("--- HATER " + usuario + " ---");
+
+		ArrayList<Avaliacao> avaliacoesUsua = mapAvaliPorUsuario.get(usuario);
+
+		if (avaliacoesUsua == null) {
 			System.out.println("Nao");
-		}else {
-			System.out.println("Sim");
+			return;
 		}
+
+		long notas1 = avaliacoesUsua.stream().filter(a -> a.getNota() == 1).count();
+
+		long notas5 = avaliacoesUsua.stream().filter(a -> a.getNota() == 5).count();
+
+		System.out.println(notas1 > notas5 ? "Sim" : "Nao");
 	}
 
 	public void lerDadosPArquivo(String filmesCsv, String avaliacoesCsv) {
@@ -311,7 +296,7 @@ public class SistemaPrincipal {
 				throw new RuntimeException(e);
 			}
 		}).limit(n) // A "seta" acima gera as linhas, e o limit(n) diz quantas queremos
-		  .collect(Collectors.toCollection(ArrayList::new)); // Transforma em ArrayList
+				.collect(Collectors.toCollection(ArrayList::new)); // Transforma em ArrayList
 	}
 
 	public void carregarDados(ArrayList<String> conteudoFilme, ArrayList<String> conteudoAvaliacao) {
@@ -325,25 +310,32 @@ public class SistemaPrincipal {
 
 				Filme novoFilme = new Filme(Long.parseLong(itens[0]), itens[1], itens[2], itens[3],
 						Integer.parseInt(itens[4]));
-				
+
 				filmes.add(novoFilme);
 			}
 			mapearFilmesID();
 			mapearFilmGeneros();
-			//mapearFilmTitulo();
+			// mapearFilmTitulo();
 		}
 		if (conteudoAvaliacao != null) {
+			
+		    HashMap<String, Avaliacao> mapaUnico = new HashMap<>();
+		    
 			for (int i = 0; i < conteudoAvaliacao.size(); i++) {
 				if (i == 0 && conteudoAvaliacao.get(0).equals("usuario,id_filme,nota")) {
 					continue;
 				}
 				String[] itens = conteudoAvaliacao.get(i).split(",");
 
-				Avaliacao novaAvaliacao = new Avaliacao(Long.parseLong(itens[0]), Long.parseLong(itens[1]),
-						Integer.parseInt(itens[2]));
-				
-				avaliacoes.add(novaAvaliacao);
+				Avaliacao novaAvaliacao = new Avaliacao(Long.parseLong(itens[0]), 
+														Long.parseLong(itens[1]),
+														Double.parseDouble(itens[2]));
+
+				String chaveString = itens[0] +"_"+itens[1];
+				mapaUnico.put(chaveString, novaAvaliacao); // sobrescreve automaticamente se já existir
 			}
+			
+			avaliacoes.addAll(mapaUnico.values()); // Passa o mapa para o vetor
 			mapearAvaliUsuario();
 		}
 
