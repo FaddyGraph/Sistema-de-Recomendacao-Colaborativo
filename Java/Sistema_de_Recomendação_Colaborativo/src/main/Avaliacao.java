@@ -1,15 +1,14 @@
 package main;
 
 
-
 import java.util.Objects;
 
 public class Avaliacao {
 	private long usuario;
 	private long id_filme;
-	private int nota;
+	private double nota;
 	
-	public Avaliacao(long usuario, long id_filme, int nota) {
+	public Avaliacao(long usuario, long id_filme, double nota) {
 		setUsuario(usuario);
 		setId_filme(id_filme);
 		setNota(nota);;
@@ -36,11 +35,11 @@ public class Avaliacao {
 		this.id_filme = id_filme;
 	}
 	
-	public int getNota() {
+	public double getNota() {
 		return nota;
 	}
 
-	public void setNota(int nota) {
+	public void setNota(double nota) {
 	    if (nota < 0 || nota > 5) {
 	        throw new IllegalArgumentException("Nota inválida: a nota deve estar entre 0 e 5.");
 	    }
