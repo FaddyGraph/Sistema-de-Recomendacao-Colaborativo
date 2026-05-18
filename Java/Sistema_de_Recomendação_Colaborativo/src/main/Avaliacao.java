@@ -4,42 +4,42 @@ package main;
 import java.util.Objects;
 
 public class Avaliacao {
-	private long usuario;
-	private long id_filme;
-	private double nota;
+	private Long usuario;
+	private Long id_filme;
+	private Double nota;
 	
-	public Avaliacao(long usuario, long id_filme, double nota) {
+	public Avaliacao(Long usuario, Long id_filme, Double nota) {
 		setUsuario(usuario);
 		setId_filme(id_filme);
 		setNota(nota);;
 	}
 
-	public long getUsuario() {
+	public Long getUsuario() {
 		return usuario;
 	}
 	
-	public void setUsuario(long usuario) {
+	public void setUsuario(Long usuario) {
 		if (usuario <= 0) {
 			throw new IllegalArgumentException("ID de usuário inválido: deve ser um número positivo.");
 		}
 		this.usuario = usuario;
 	}
 	
-	public long getId_filme() {
+	public Long getId_filme() {
 		return id_filme;
 	}
-	public void setId_filme(long id_filme) {
+	public void setId_filme(Long id_filme) {
 		if (id_filme <= 0) {
 			throw new IllegalArgumentException("ID do filme inválido: deve ser um número positivo.");
 		}
 		this.id_filme = id_filme;
 	}
 	
-	public double getNota() {
+	public Double getNota() {
 		return nota;
 	}
 
-	public void setNota(double nota) {
+	public void setNota(Double nota) {
 	    if (nota < 0 || nota > 5) {
 	        throw new IllegalArgumentException("Nota inválida: a nota deve estar entre 0 e 5.");
 	    }

@@ -10,11 +10,14 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 
 public class SistemaPrincipal {
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -204,8 +207,9 @@ public class SistemaPrincipal {
 
 	public void listarFilmesNAvaliados(Long usuario) {
 		System.out.println("--- NAO_AVALIADOS " + usuario + " ---");
-		Set<Long> idsAvaliados = avaliacoes.stream().filter(a -> a.getUsuario() == usuario) // Filtra só as notas desse
-																							// user
+		Set<Long> idsAvaliados = avaliacoes.stream()
+				.filter(a -> a.getUsuario().equals(usuario)) // Filtra só as notas desse user
+																							
 				.map(Avaliacao::getId_filme).collect(Collectors.toSet());
 
 		filmes.stream().filter(f -> !idsAvaliados.contains(f.getId())) // se nao tiver em idsAvaliados
@@ -252,17 +256,38 @@ public class SistemaPrincipal {
 		System.out.println(notas1 > notas5 ? "Sim" : "Nao");
 	}
 	
-	public void recomendar(long usuario , String tipoVinculo ) {
+	public void recomendar(long usuario , String tipoVinculoTexto ) {
 		
-		Set<Filme> filmesRecomendados;
-		System.out.println("--- RECOMENDAR " + usuario +" "+tipoVinculo+ " ---");
+		tipoVinculoTexto = tipoVinculoTexto.toUpperCase();
+		
+		Set<Filme> filmesRecomendados = new HashSet<Filme>();
+		
+		System.out.println("--- RECOMENDAR " + usuario +" "+tipoVinculoTexto+ " ---");
 //		1 - Média das Notas Fornecidas Entre os Vizinhos Elegíveis (Ordem Decrescente de relevância).
 //		2 - Ano de Publicação (Mais recentes exibidos primeiro).
 //		3 - Alfabético pelo Título da Película.
 		
-		filmesRecomendados = recomendarRestrito(usuario);
+		TipoVinculo tipoVinculo = TipoVinculo.deString(tipoVinculoTexto);
 		
-		// ### Calcular a média das notas dos vizinhos para cada filme recomendado
+		switch (tipoVinculo) {
+		case RESTRITO: {
+			filmesRecomendados = recomendarRestrito(usuario);
+			break;
+		}
+		case TOLERANTE: {
+			//filmesRecomendados = recomendarRestrito(usuario);
+			break;
+		}
+		case ESPECIALIDADE: {
+			//filmesRecomendados = recomendarRestrito(usuario);
+			break;
+		}
+		default:
+			System.out.println("Erro: Tipo de Vinculo não encontrado.");
+			return;
+		}
+		
+		// ### Calcular a média das notas dos vizinhos para cada filme recomendado e melhorar função "Restrito"
 		filmesRecomendados.stream()
 	    .sorted(
 	        Comparator.comparing(Filme::getAno).reversed() // ### trocar a primeira comparação pela media
@@ -283,6 +308,11 @@ public class SistemaPrincipal {
 				.filter(a -> a.getNota()>=4)
 				.map(Avaliacao::getUsuario)
 				.filter(id -> !id.equals(usuario)) // remove o próprio usuário alvo
+				.collect(Collectors.groupingBy(id -> id, Collectors.counting()
+						))
+				.entrySet().stream() // itera sobre os pares (usuário → contagem)
+				.filter(entry -> entry.getValue() >= 3) // mantém só quem tem 3 ou mais filmes em comum
+				.map(Map.Entry::getKey) // extrai só o ID do usuário
 				.collect(Collectors.toSet());
 						
 		
@@ -291,7 +321,8 @@ public class SistemaPrincipal {
 		Set<Filme> filmesRecomendados = vizinhos.stream() 
 		    .flatMap(idVizinho -> mapAvaliPorUsuario       // para cada vizinho, busca suas avaliações
 		        .getOrDefault(idVizinho, new ArrayList<>())// retorna lista vazia se não tiver avaliações
-		        .stream())                                 // transforma todas as listas em um único fluxo
+		        .stream())									// transforma todas as listas em um único fluxo
+		    .filter(a -> a.getNota()>=4)
 		    .map(a -> mapFilmes.get(a.getId_filme()))      // troca cada avaliação pelo objeto Filme correspondente
 		    .filter(Objects::nonNull)                      // descarta casos onde o filme não foi encontrado no mapa
 		    .filter(f -> !idFilmesUsuarioAlvo.contains(f.getId())) // remove filmes que o alvo já assistiu
@@ -345,7 +376,7 @@ public class SistemaPrincipal {
 
 	public void carregarDados(ArrayList<String> conteudoFilme, ArrayList<String> conteudoAvaliacao) {
 
-		if (conteudoFilme != null) {
+		if (conteudoFilme != null) { //se não for nulo, carrega os dados de filmes
 			for (int i = 0; i < conteudoFilme.size(); i++) {
 				if (i == 0 && conteudoFilme.get(0).equals("id,titulo,generos,diretor,ano")) {
 					continue;
@@ -361,14 +392,12 @@ public class SistemaPrincipal {
 			mapearFilmGeneros();
 			// mapearFilmTitulo();
 		}
-		if (conteudoAvaliacao != null) {
+		if (conteudoAvaliacao != null) { //se conteudoFilme e conteudoAvaliacao não forem nulo, carrega as avaliações
 			
-		    HashMap<String, Avaliacao> mapaUnico = new HashMap<>();
+		    HashMap<String, Avaliacao> mapaUnico = new HashMap<>(); //serve para garantir que só a última avaliação permaneça
 		    
 			for (int i = 0; i < conteudoAvaliacao.size(); i++) {
-				if (i == 0 && conteudoAvaliacao.get(0).equals("usuario,id_filme,nota")) {
-					continue;
-				}
+				if (i == 0 && conteudoAvaliacao.get(0).equals("usuario,id_filme,nota")) {continue;}
 				String[] itens = conteudoAvaliacao.get(i).split(",");
 
 				Avaliacao novaAvaliacao = new Avaliacao(Long.parseLong(itens[0]), 
