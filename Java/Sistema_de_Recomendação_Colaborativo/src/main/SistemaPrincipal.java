@@ -275,11 +275,11 @@ public class SistemaPrincipal {
 			break;
 		}
 		case TOLERANTE: {
-			//filmesRecomendados = recomendarRestrito(usuario);
+			filmesRecomendados = recomendarTolerante(usuario);
 			break;
 		}
 		case ESPECIALIDADE: {
-			//filmesRecomendados = recomendarRestrito(usuario);
+			filmesRecomendados = recomendarEspecialidade(usuario);
 			break;
 		}
 		default:
@@ -330,6 +330,70 @@ public class SistemaPrincipal {
 		
 		return filmesRecomendados;
 	}
+	
+	private Set<Filme> recomendarTolerante(long usuario) {
+		Set<Long> idFilmesUsuarioAlvo = mapAvaliPorUsuario.getOrDefault(usuario, new ArrayList<>())
+				.stream()
+				.map(Avaliacao::getId_filme) 
+				.collect(Collectors.toSet());
+		
+		Set<Long> vizinhos = idFilmesUsuarioAlvo.stream()
+				.flatMap(idFilme -> mapAvaliPorFilme.getOrDefault(idFilme, new ArrayList<>()).stream()) 
+				.map(Avaliacao::getUsuario)
+				.filter(id -> !id.equals(usuario)) 
+				.collect(Collectors.groupingBy(id -> id, Collectors.counting()
+						))
+				.entrySet().stream() 
+				.filter(entry -> entry.getValue() >= 1) 
+				.map(Map.Entry::getKey) 
+				.collect(Collectors.toSet());
+						
+		
+		
+		Set<Filme> filmesRecomendados = vizinhos.stream() 
+		    .flatMap(idVizinho -> mapAvaliPorUsuario       
+		        .getOrDefault(idVizinho, new ArrayList<>())
+		        .stream())									
+		    .filter(a -> a.getNota()==5) // Pega somente avaliações de filmes com nota 5
+		    .map(a -> mapFilmes.get(a.getId_filme()))      
+		    .filter(Objects::nonNull)                     
+		    .filter(f -> !idFilmesUsuarioAlvo.contains(f.getId())) 
+		    .collect(Collectors.toSet());                  
+		
+		return filmesRecomendados;
+	}
+	private Set<Filme> recomendarEspecialidade(long usuario) {
+		Set<Long> idFilmesUsuarioAlvo = mapAvaliPorUsuario.getOrDefault(usuario, new ArrayList<>())
+				.stream()
+				.map(Avaliacao::getId_filme) 
+				.collect(Collectors.toSet());
+		
+		Set<Long> vizinhos = idFilmesUsuarioAlvo.stream()
+				.flatMap(idFilme -> mapAvaliPorFilme.getOrDefault(idFilme, new ArrayList<>()).stream()) 
+				.map(Avaliacao::getUsuario)
+				.filter(id -> !id.equals(usuario)) 
+				.collect(Collectors.groupingBy(id -> id, Collectors.counting()
+						))
+				.entrySet().stream() 
+				.filter(entry -> entry.getValue() >= 1) 
+				.map(Map.Entry::getKey) 
+				.collect(Collectors.toSet());
+						
+		
+		
+		Set<Filme> filmesRecomendados = vizinhos.stream() 
+		    .flatMap(idVizinho -> mapAvaliPorUsuario       
+		        .getOrDefault(idVizinho, new ArrayList<>())
+		        .stream())									
+		    .filter(a -> a.getNota()==5) // Pega somente avaliações de filmes com nota 5
+		    .map(a -> mapFilmes.get(a.getId_filme()))      
+		    .filter(Objects::nonNull)                     
+		    .filter(f -> !idFilmesUsuarioAlvo.contains(f.getId())) 
+		    .collect(Collectors.toSet());                  
+		
+		return filmesRecomendados;
+	}
+	
 
 	public void lerDados(BufferedReader br) {
 		try {
