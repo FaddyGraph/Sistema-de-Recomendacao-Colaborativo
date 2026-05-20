@@ -1,4 +1,3 @@
-package main;
 
 
 public enum TipoVinculo {

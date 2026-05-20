@@ -1,13 +1,15 @@
-package main;
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Filme {
 
 	private long id; //fornecido pelo usuario
 	private String titulo;
-	private String[] generos; 
+	private ArrayList<String> generos; 
 	private String diretor;
 	private int ano;
 	
@@ -35,7 +37,7 @@ public class Filme {
 		this.titulo = titulo;
 	}
 
-	public String[] getGeneros() {
+	public ArrayList<String> getGeneros() {
 		return generos;
 	}
 
@@ -43,7 +45,8 @@ public class Filme {
 		if (generos == null || generos.isBlank()) {
 	    	throw new IllegalArgumentException("Genero é obrigatório.");
 	    }
-		this.generos = generos.split(";");
+		this.generos = Arrays.stream(generos.split(";"))
+			    .collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	public String getDiretor() {

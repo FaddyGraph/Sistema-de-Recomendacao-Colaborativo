@@ -1,4 +1,3 @@
-package main;
 
 
 import java.io.BufferedReader;
@@ -10,7 +9,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -36,9 +34,9 @@ public class SistemaPrincipal {
 
 	public void main() {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		lerDados("D://CEFET/CLP/Sistema-de-Recomendacao-Colaborativo/data/filmes.csv",
-				 "D:/CEFET/CLP/Sistema-de-Recomendacao-Colaborativo/data/avaliacoes.csv" ); //Ex: "src/dados/filmes.csv" , "src/dados/avaliacoes.csv"
-		//lerDados(br);
+//		lerDados("D://CEFET/CLP/Sistema-de-Recomendacao-Colaborativo/data/filmes.csv",
+//				 "D:/CEFET/CLP/Sistema-de-Recomendacao-Colaborativo/data/avaliacoes.csv" ); //Ex: "src/dados/filmes.csv" , "src/dados/avaliacoes.csv"
+		lerDados(br);
 
 		String linha;
 
@@ -55,7 +53,7 @@ public class SistemaPrincipal {
 				switch (comando) {
 				case GENERO: {
 					if (comandoString.length > 1) {
-						listarFilmePorGenero(comandoString[1]);
+						listarFilmesPorGenero(comandoString[1]); 
 					}
 					break;
 				}
@@ -165,7 +163,7 @@ public class SistemaPrincipal {
 //		}
 //	}
 
-	public void listarFilmePorGenero(String generoAlvo) {
+	public void listarFilmesPorGenero(String generoAlvo) {
 		ArrayList<Filme> listaFiltrada = mapfilmesPorGenero.get(generoAlvo);
 
 		System.out.println("--- GENERO " + generoAlvo + " ---");
@@ -175,6 +173,14 @@ public class SistemaPrincipal {
 				System.out.println("- " + f.getTitulo());
 			}
 		}
+	}
+	
+	public void printarSetFilmes(Set<Filme> filmes) { 
+		
+		if (filmes == null || filmes.isEmpty()) {return;}
+		
+		filmes.stream()
+		.forEach(f -> System.out.println("- " + f.getTitulo()));
 	}
 
 	public void listarFilmesAnoAcima(int anoCorte) {
@@ -260,7 +266,7 @@ public class SistemaPrincipal {
 		
 		tipoVinculoTexto = tipoVinculoTexto.toUpperCase();
 		
-		Set<Filme> filmesRecomendados = new HashSet<Filme>();
+		ArrayList<Filme> filmesRecomendados = new ArrayList<Filme>();
 		
 		System.out.println("--- RECOMENDAR " + usuario +" "+tipoVinculoTexto+ " ---");
 //		1 - Média das Notas Fornecidas Entre os Vizinhos Elegíveis (Ordem Decrescente de relevância).
@@ -287,16 +293,10 @@ public class SistemaPrincipal {
 			return;
 		}
 		
-		// ### Calcular a média das notas dos vizinhos para cada filme recomendado e melhorar função "Restrito"
 		filmesRecomendados.stream()
-	    .sorted(
-	        Comparator.comparing(Filme::getAno).reversed() // ### trocar a primeira comparação pela media
-	            //.thenComparing(/* critério 2 */)
-	            .thenComparing(Filme::getTitulo)
-	    )
 	    .forEach(f -> System.out.println("- " + f.getTitulo()));
 	}
-	private Set<Filme> recomendarRestrito(long usuario) {
+	private ArrayList<Filme> recomendarRestrito(long usuario) {
 		Set<Long> idFilmesUsuarioAlvo = mapAvaliPorUsuario.getOrDefault(usuario, new ArrayList<>())
 				.stream()
 				.filter(a -> a.getNota()>=4) // fitra por nota maior ou igual a 4
@@ -326,12 +326,14 @@ public class SistemaPrincipal {
 		    .map(a -> mapFilmes.get(a.getId_filme()))      // troca cada avaliação pelo objeto Filme correspondente
 		    .filter(Objects::nonNull)                      // descarta casos onde o filme não foi encontrado no mapa
 		    .filter(f -> !idFilmesUsuarioAlvo.contains(f.getId())) // remove filmes que o alvo já assistiu
-		    .collect(Collectors.toSet());                  
+		    .collect(Collectors.toSet());   
 		
-		return filmesRecomendados;
+		filmesRecomendados = exclusãoFilmesPorOdioADiretor(usuario, filmesRecomendados);
+
+		return ordenarFilmesRecomendados(vizinhos, filmesRecomendados , false);
 	}
 	
-	private Set<Filme> recomendarTolerante(long usuario) {
+	private ArrayList<Filme> recomendarTolerante(long usuario) {
 		Set<Long> idFilmesUsuarioAlvo = mapAvaliPorUsuario.getOrDefault(usuario, new ArrayList<>())
 				.stream()
 				.map(Avaliacao::getId_filme) 
@@ -340,15 +342,8 @@ public class SistemaPrincipal {
 		Set<Long> vizinhos = idFilmesUsuarioAlvo.stream()
 				.flatMap(idFilme -> mapAvaliPorFilme.getOrDefault(idFilme, new ArrayList<>()).stream()) 
 				.map(Avaliacao::getUsuario)
-				.filter(id -> !id.equals(usuario)) 
-				.collect(Collectors.groupingBy(id -> id, Collectors.counting()
-						))
-				.entrySet().stream() 
-				.filter(entry -> entry.getValue() >= 1) 
-				.map(Map.Entry::getKey) 
+				.filter(id -> !id.equals(usuario))
 				.collect(Collectors.toSet());
-						
-		
 		
 		Set<Filme> filmesRecomendados = vizinhos.stream() 
 		    .flatMap(idVizinho -> mapAvaliPorUsuario       
@@ -358,25 +353,39 @@ public class SistemaPrincipal {
 		    .map(a -> mapFilmes.get(a.getId_filme()))      
 		    .filter(Objects::nonNull)                     
 		    .filter(f -> !idFilmesUsuarioAlvo.contains(f.getId())) 
-		    .collect(Collectors.toSet());                  
+		    .collect(Collectors.toSet());    
 		
-		return filmesRecomendados;
+		filmesRecomendados = exclusãoFilmesPorOdioADiretor(usuario, filmesRecomendados);
+
+		return ordenarFilmesRecomendados(vizinhos, filmesRecomendados, true);
 	}
-	private Set<Filme> recomendarEspecialidade(long usuario) {
+	private ArrayList<Filme> recomendarEspecialidade(long usuario) {
+		
 		Set<Long> idFilmesUsuarioAlvo = mapAvaliPorUsuario.getOrDefault(usuario, new ArrayList<>())
 				.stream()
 				.map(Avaliacao::getId_filme) 
 				.collect(Collectors.toSet());
 		
-		Set<Long> vizinhos = idFilmesUsuarioAlvo.stream()
-				.flatMap(idFilme -> mapAvaliPorFilme.getOrDefault(idFilme, new ArrayList<>()).stream()) 
+		String generoAlvo = idFilmesUsuarioAlvo.stream()
+	            .map(id -> mapFilmes.get(id))
+	            .filter(Objects::nonNull)
+	            .flatMap(f -> f.getGeneros().stream())
+	            .collect(Collectors.groupingBy(genero -> genero, Collectors.counting()))
+	            .entrySet().stream()
+	            .max(Map.Entry.<String, Long>comparingByValue()
+	                    .thenComparing(Map.Entry.comparingByKey(Comparator.reverseOrder())))
+	            .map(Map.Entry::getKey)
+	            .orElse(null);
+	            
+	    if (generoAlvo == null) {
+	        return new ArrayList<>();
+	    }
+		
+		Set<Long> vizinhos = mapfilmesPorGenero.get(generoAlvo).stream()
+				.flatMap(filme -> mapAvaliPorFilme.getOrDefault(filme.getId(), new ArrayList<>()).stream()) 
+				.filter(a -> a.getNota()>=4)
 				.map(Avaliacao::getUsuario)
 				.filter(id -> !id.equals(usuario)) 
-				.collect(Collectors.groupingBy(id -> id, Collectors.counting()
-						))
-				.entrySet().stream() 
-				.filter(entry -> entry.getValue() >= 1) 
-				.map(Map.Entry::getKey) 
 				.collect(Collectors.toSet());
 						
 		
@@ -385,13 +394,51 @@ public class SistemaPrincipal {
 		    .flatMap(idVizinho -> mapAvaliPorUsuario       
 		        .getOrDefault(idVizinho, new ArrayList<>())
 		        .stream())									
-		    .filter(a -> a.getNota()==5) // Pega somente avaliações de filmes com nota 5
+		    .filter(a -> a.getNota()>=4) // Pega somente avaliações de filmes com nota maior ou igual a 4
 		    .map(a -> mapFilmes.get(a.getId_filme()))      
 		    .filter(Objects::nonNull)                     
 		    .filter(f -> !idFilmesUsuarioAlvo.contains(f.getId())) 
-		    .collect(Collectors.toSet());                  
+		    .collect(Collectors.toSet());      
 		
-		return filmesRecomendados;
+		filmesRecomendados = exclusãoFilmesPorOdioADiretor(usuario, filmesRecomendados);
+		
+		return ordenarFilmesRecomendados(vizinhos, filmesRecomendados , false);
+	}
+	
+	private Set<Filme> exclusãoFilmesPorOdioADiretor(Long idUsuario , Set<Filme> filmes) {
+		Set<String> diretoresOdiados = mapAvaliPorUsuario.getOrDefault(idUsuario, new ArrayList<>()).stream()
+	            .filter(a -> a.getNota() == 1.0) // Uso de comparação primitiva direta (mais segura)
+	            .map(a -> mapFilmes.get(a.getId_filme()))
+	            .filter(Objects::nonNull)
+	            .map(Filme::getDiretor)
+	            .collect(Collectors.toSet());
+	    
+	    return filmes.stream()
+	            .filter(f -> !diretoresOdiados.contains(f.getDiretor()))
+	            .collect(Collectors.toSet());
+		
+	}
+	
+	
+	private ArrayList<Filme> ordenarFilmesRecomendados(Set<Long> vizinhos, Set<Filme> filmesRecomendados, boolean apenasNota5){
+		Map<Long, Double> mediaNotasVizinhos = vizinhos.stream()
+			    .flatMap(idVizinho -> mapAvaliPorUsuario.getOrDefault(idVizinho, new ArrayList<>())
+			    		.stream())
+			    	.filter(a -> filmesRecomendados.contains(mapFilmes.get(a.getId_filme()))) // só filmes recomendados
+			    	.filter(a -> !apenasNota5 || a.getNota() == 5) // filtra nota=5 , usado só no tolerante
+			    	.collect(Collectors.groupingBy(
+			        Avaliacao::getId_filme,           // agrupa por id do filme
+			        Collectors.averagingDouble(Avaliacao::getNota) // calcula a média das notas **
+			    ));
+
+			// Ordena
+			return filmesRecomendados.stream()
+			    .sorted(
+			        Comparator.comparingDouble((Filme f) -> mediaNotasVizinhos.getOrDefault(f.getId(), 0.0)).reversed() // média decrescente
+			            .thenComparing(Comparator.comparingInt(Filme::getAno).reversed())  // ano decrescente
+			            .thenComparing(Comparator.comparing(Filme::getTitulo))             // título alfabético
+			    ).collect(Collectors.toCollection(ArrayList::new));
+			
 	}
 	
 
@@ -464,9 +511,9 @@ public class SistemaPrincipal {
 				if (i == 0 && conteudoAvaliacao.get(0).equals("usuario,id_filme,nota")) {continue;}
 				String[] itens = conteudoAvaliacao.get(i).split(",");
 
-				Avaliacao novaAvaliacao = new Avaliacao(Long.parseLong(itens[0]), 
-														Long.parseLong(itens[1]),
-														Double.parseDouble(itens[2]));
+				Avaliacao novaAvaliacao = new Avaliacao(Long.parseLong(itens[0].trim()), 
+														Long.parseLong(itens[1].trim()),
+														Double.parseDouble(itens[2].trim()));
 
 				String chaveString = itens[0] +"_"+itens[1];
 				mapaUnico.put(chaveString, novaAvaliacao); // sobrescreve automaticamente se já existir
