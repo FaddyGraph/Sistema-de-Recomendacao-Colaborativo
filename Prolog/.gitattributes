@@ -1,0 +1,3 @@
+# Diz ao GitHub para tratar os arquivos da pasta data como gerados/terceiros
+data/filmes_grande.pl linguist-vendored
+data/avaliacoes_grande.pl linguist-vendored

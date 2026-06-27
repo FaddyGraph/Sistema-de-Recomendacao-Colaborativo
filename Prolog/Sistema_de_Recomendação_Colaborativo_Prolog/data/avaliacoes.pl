@@ -1,0 +1,27 @@
+% avaliacao(usuario, id_filme, nota)
+avaliacao(1, 1, 5).
+avaliacao(1, 3, 4).
+avaliacao(1, 6, 5).
+avaliacao(1, 8, 4).
+avaliacao(2, 1, 5).
+avaliacao(2, 6, 4).
+avaliacao(2, 8, 5).
+avaliacao(2, 10, 3).
+avaliacao(3, 2, 5).
+avaliacao(3, 4, 4).
+avaliacao(3, 5, 4).
+avaliacao(3, 7, 3).
+avaliacao(4, 1, 3).
+avaliacao(4, 2, 5).
+avaliacao(4, 10, 5).
+avaliacao(5, 3, 5).
+avaliacao(5, 6, 5).
+avaliacao(5, 8, 5).
+avaliacao(5, 9, 1).
+avaliacao(6, 4, 5).
+avaliacao(6, 5, 5).
+avaliacao(6, 7, 5).
+avaliacao(6, 9, 4).
+avaliacao(7, 1, 4).
+avaliacao(7, 3, 4).
+avaliacao(7, 6, 4).
