@@ -1,5 +1,3 @@
 # Diz ao GitHub para tratar os arquivos da pasta data como gerados/terceiros
-data/filmes_grande.pl linguist-vendored
-data/filmes.pl linguist-vendored
-data/avaliacoes_grande.pl linguist-vendored
-data/avaliacoes.pl linguist-vendored
+# Trata todos os arquivos .pl dentro de qualquer pasta "data" como gerados/terceiros
+**/data/*.pl linguist-vendored
