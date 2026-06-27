@@ -1,0 +1,389 @@
+% filme : linha 6 ; usuario linha 58 ; avaliação linha 90
+
+%--------------------------------------------------------------
+
+% filmes(ID, Titulo, Genero, Diretor, Ano, Classificacao, Duracao)
+filme(1, 'Filme_1', 'Acao', 'Scorsese', 1996, 16, 160).
+filme(2, 'Filme_2', 'Acao', 'Tarantino', 2015, 14, 110).
+filme(3, 'Filme_3', 'Animacao', 'Tarantino', 1994, 16, 180).
+filme(4, 'Filme_4', 'Acao', 'Cameron', 2003, 10, 129).
+filme(5, 'Filme_5', 'Terror', 'Cameron', 2009, 14, 122).
+filme(6, 'Filme_6', 'Animacao', 'Tarantino', 2013, 12, 84).
+filme(7, 'Filme_7', 'Romance', 'Tarantino', 1996, 10, 117).
+filme(8, 'Filme_8', 'Ficcao', 'Cameron', 1988, 18, 114).
+filme(9, 'Filme_9', 'Ficcao', 'Scorsese', 2004, 14, 134).
+filme(10, 'Filme_10', 'Animacao', 'Tarantino', 2014, 12, 105).
+filme(11, 'Filme_11', 'Romance', 'Coppola', 2013, 10, 126).
+filme(12, 'Filme_12', 'Romance', 'Scorsese', 2011, 16, 160).
+filme(13, 'Filme_13', 'Terror', 'Tarantino', 2001, 0, 140).
+filme(14, 'Filme_14', 'Terror', 'Cameron', 2022, 10, 104).
+filme(15, 'Filme_15', 'Terror', 'Spielberg', 1996, 18, 161).
+filme(16, 'Filme_16', 'Terror', 'Spielberg', 1986, 0, 83).
+filme(17, 'Filme_17', 'Acao', 'Coppola', 2022, 0, 178).
+filme(18, 'Filme_18', 'Terror', 'Scorsese', 1985, 0, 126).
+filme(19, 'Filme_19', 'Romance', 'Nolan', 2008, 10, 87).
+filme(20, 'Filme_20', 'Drama', 'Scorsese', 2021, 0, 92).
+filme(21, 'Filme_21', 'Drama', 'Coppola', 2019, 18, 165).
+filme(22, 'Filme_22', 'Ficcao', 'Scorsese', 2003, 12, 129).
+filme(23, 'Filme_23', 'Ficcao', 'Spielberg', 2002, 12, 172).
+filme(24, 'Filme_24', 'Terror', 'Cameron', 2001, 10, 80).
+filme(25, 'Filme_25', 'Romance', 'Tarantino', 2018, 10, 161).
+filme(26, 'Filme_26', 'Drama', 'Nolan', 2002, 16, 87).
+filme(27, 'Filme_27', 'Drama', 'Scorsese', 1985, 0, 167).
+filme(28, 'Filme_28', 'Drama', 'Nolan', 2011, 12, 123).
+filme(29, 'Filme_29', 'Romance', 'Scorsese', 2020, 10, 108).
+filme(30, 'Filme_30', 'Acao', 'Scorsese', 2004, 0, 167).
+filme(31, 'Filme_31', 'Terror', 'Nolan', 1999, 12, 100).
+filme(32, 'Filme_32', 'Acao', 'Scorsese', 1989, 18, 87).
+filme(33, 'Filme_33', 'Romance', 'Tarantino', 2016, 16, 145).
+filme(34, 'Filme_34', 'Acao', 'Scorsese', 1995, 18, 141).
+filme(35, 'Filme_35', 'Acao', 'Cameron', 2021, 12, 121).
+filme(36, 'Filme_36', 'Acao', 'Nolan', 2021, 16, 151).
+filme(37, 'Filme_37', 'Drama', 'Tarantino', 2007, 12, 126).
+filme(38, 'Filme_38', 'Terror', 'Coppola', 1985, 12, 166).
+filme(39, 'Filme_39', 'Acao', 'Scorsese', 1984, 14, 120).
+filme(40, 'Filme_40', 'Romance', 'Coppola', 2006, 14, 94).
+filme(41, 'Filme_41', 'Animacao', 'Nolan', 2022, 12, 178).
+filme(42, 'Filme_42', 'Terror', 'Coppola', 1982, 10, 165).
+filme(43, 'Filme_43', 'Drama', 'Tarantino', 2003, 18, 131).
+filme(44, 'Filme_44', 'Acao', 'Spielberg', 1988, 16, 111).
+filme(45, 'Filme_45', 'Ficcao', 'Spielberg', 2010, 18, 113).
+filme(46, 'Filme_46', 'Romance', 'Cameron', 2001, 0, 173).
+filme(47, 'Filme_47', 'Drama', 'Nolan', 1996, 12, 155).
+filme(48, 'Filme_48', 'Drama', 'Tarantino', 2001, 18, 105).
+filme(49, 'Filme_49', 'Ficcao', 'Coppola', 1981, 0, 99).
+filme(50, 'Filme_50', 'Ficcao', 'Tarantino', 2002, 12, 133).
+
+% usuarios(ID, Nome, Idade)
+usuario(1, 'User_1', 58).
+usuario(2, 'User_2', 33).
+usuario(3, 'User_3', 38).
+usuario(4, 'User_4', 22).
+usuario(5, 'User_5', 56).
+usuario(6, 'User_6', 58).
+usuario(7, 'User_7', 16).
+usuario(8, 'User_8', 43).
+usuario(9, 'User_9', 46).
+usuario(10, 'User_10', 23).
+usuario(11, 'User_11', 54).
+usuario(12, 'User_12', 55).
+usuario(13, 'User_13', 15).
+usuario(14, 'User_14', 23).
+usuario(15, 'User_15', 52).
+usuario(16, 'User_16', 24).
+usuario(17, 'User_17', 59).
+usuario(18, 'User_18', 54).
+usuario(19, 'User_19', 58).
+usuario(20, 'User_20', 15).
+usuario(21, 'User_21', 18).
+usuario(22, 'User_22', 42).
+usuario(23, 'User_23', 33).
+usuario(24, 'User_24', 46).
+usuario(25, 'User_25', 52).
+usuario(26, 'User_26', 40).
+usuario(27, 'User_27', 27).
+usuario(28, 'User_28', 37).
+usuario(29, 'User_29', 42).
+usuario(30, 'User_30', 59).
+
+% avaliacao(ID_Usuario, ID_Filme, Nota)
+avaliacao(1, 10, 4).
+avaliacao(1, 28, 2).
+avaliacao(4, 45, 5).
+avaliacao(22, 41, 3).
+avaliacao(14, 22, 5).
+avaliacao(25, 50, 1).
+avaliacao(11, 31, 2).
+avaliacao(16, 26, 3).
+avaliacao(13, 4, 1).
+avaliacao(1, 24, 4).
+avaliacao(14, 45, 4).
+avaliacao(14, 36, 5).
+avaliacao(2, 33, 1).
+avaliacao(21, 5, 3).
+avaliacao(14, 42, 3).
+avaliacao(1, 29, 4).
+avaliacao(11, 37, 5).
+avaliacao(15, 45, 5).
+avaliacao(11, 35, 2).
+avaliacao(28, 44, 4).
+avaliacao(30, 1, 2).
+avaliacao(11, 20, 2).
+avaliacao(14, 43, 3).
+avaliacao(1, 41, 5).
+avaliacao(23, 21, 3).
+avaliacao(28, 7, 4).
+avaliacao(28, 12, 1).
+avaliacao(15, 34, 4).
+avaliacao(5, 39, 5).
+avaliacao(24, 11, 5).
+avaliacao(26, 32, 4).
+avaliacao(15, 36, 5).
+avaliacao(11, 12, 3).
+avaliacao(19, 17, 5).
+avaliacao(4, 43, 5).
+avaliacao(4, 27, 5).
+avaliacao(25, 35, 1).
+avaliacao(30, 33, 4).
+avaliacao(15, 16, 1).
+avaliacao(1, 30, 4).
+avaliacao(29, 12, 2).
+avaliacao(17, 41, 1).
+avaliacao(9, 2, 2).
+avaliacao(29, 41, 2).
+avaliacao(4, 34, 4).
+avaliacao(11, 2, 2).
+avaliacao(6, 17, 5).
+avaliacao(12, 15, 3).
+avaliacao(22, 3, 5).
+avaliacao(20, 22, 2).
+avaliacao(10, 24, 5).
+avaliacao(19, 37, 2).
+avaliacao(4, 9, 5).
+avaliacao(8, 20, 3).
+avaliacao(26, 48, 2).
+avaliacao(1, 37, 3).
+avaliacao(7, 33, 5).
+avaliacao(24, 35, 5).
+avaliacao(12, 32, 2).
+avaliacao(23, 2, 2).
+avaliacao(5, 31, 1).
+avaliacao(29, 35, 3).
+avaliacao(22, 7, 1).
+avaliacao(17, 17, 4).
+avaliacao(16, 42, 4).
+avaliacao(15, 19, 3).
+avaliacao(25, 27, 2).
+avaliacao(14, 38, 2).
+avaliacao(18, 13, 2).
+avaliacao(30, 50, 3).
+avaliacao(17, 30, 1).
+avaliacao(13, 21, 1).
+avaliacao(9, 39, 4).
+avaliacao(18, 22, 4).
+avaliacao(18, 3, 4).
+avaliacao(10, 40, 3).
+avaliacao(29, 26, 5).
+avaliacao(18, 15, 3).
+avaliacao(5, 10, 5).
+avaliacao(10, 14, 1).
+avaliacao(2, 39, 1).
+avaliacao(3, 50, 3).
+avaliacao(17, 37, 1).
+avaliacao(23, 25, 4).
+avaliacao(9, 4, 2).
+avaliacao(27, 37, 1).
+avaliacao(24, 33, 4).
+avaliacao(7, 36, 3).
+avaliacao(10, 36, 3).
+avaliacao(11, 29, 4).
+avaliacao(20, 14, 2).
+avaliacao(10, 10, 4).
+avaliacao(16, 41, 5).
+avaliacao(8, 38, 4).
+avaliacao(10, 31, 2).
+avaliacao(14, 28, 1).
+avaliacao(17, 20, 2).
+avaliacao(10, 5, 3).
+avaliacao(28, 27, 2).
+avaliacao(3, 30, 4).
+avaliacao(25, 39, 2).
+avaliacao(10, 28, 4).
+avaliacao(5, 17, 4).
+avaliacao(15, 21, 1).
+avaliacao(8, 43, 3).
+avaliacao(20, 29, 5).
+avaliacao(12, 10, 3).
+avaliacao(22, 49, 5).
+avaliacao(15, 20, 5).
+avaliacao(12, 20, 1).
+avaliacao(19, 2, 5).
+avaliacao(14, 40, 2).
+avaliacao(2, 23, 1).
+avaliacao(8, 12, 3).
+avaliacao(26, 47, 2).
+avaliacao(26, 38, 5).
+avaliacao(16, 32, 3).
+avaliacao(2, 10, 4).
+avaliacao(27, 15, 4).
+avaliacao(21, 37, 4).
+avaliacao(18, 27, 2).
+avaliacao(8, 15, 1).
+avaliacao(22, 31, 4).
+avaliacao(27, 22, 5).
+avaliacao(30, 43, 2).
+avaliacao(5, 19, 4).
+avaliacao(13, 43, 3).
+avaliacao(21, 18, 5).
+avaliacao(29, 28, 5).
+avaliacao(5, 4, 3).
+avaliacao(14, 13, 3).
+avaliacao(26, 35, 1).
+avaliacao(2, 43, 2).
+avaliacao(29, 32, 3).
+avaliacao(30, 40, 5).
+avaliacao(18, 31, 4).
+avaliacao(19, 47, 4).
+avaliacao(15, 41, 1).
+avaliacao(18, 24, 5).
+avaliacao(3, 36, 5).
+avaliacao(30, 47, 5).
+avaliacao(28, 8, 2).
+avaliacao(27, 13, 2).
+avaliacao(27, 32, 4).
+avaliacao(24, 25, 2).
+avaliacao(11, 47, 3).
+avaliacao(24, 20, 4).
+avaliacao(26, 16, 5).
+avaliacao(13, 24, 1).
+avaliacao(6, 26, 1).
+avaliacao(12, 3, 1).
+avaliacao(26, 11, 4).
+avaliacao(7, 2, 2).
+avaliacao(20, 42, 2).
+avaliacao(6, 41, 1).
+avaliacao(16, 36, 5).
+avaliacao(14, 27, 5).
+avaliacao(17, 38, 2).
+avaliacao(23, 42, 5).
+avaliacao(22, 38, 2).
+avaliacao(20, 44, 5).
+avaliacao(25, 30, 5).
+avaliacao(29, 20, 4).
+avaliacao(12, 31, 3).
+avaliacao(10, 50, 2).
+avaliacao(8, 30, 4).
+avaliacao(2, 38, 4).
+avaliacao(24, 16, 5).
+avaliacao(12, 30, 2).
+avaliacao(9, 18, 4).
+avaliacao(2, 50, 4).
+avaliacao(27, 20, 4).
+avaliacao(8, 35, 2).
+avaliacao(30, 19, 2).
+avaliacao(6, 25, 2).
+avaliacao(30, 12, 3).
+avaliacao(2, 27, 2).
+avaliacao(16, 13, 2).
+avaliacao(9, 26, 1).
+avaliacao(19, 25, 5).
+avaliacao(20, 37, 4).
+avaliacao(28, 13, 5).
+avaliacao(8, 33, 4).
+avaliacao(13, 36, 4).
+avaliacao(18, 36, 4).
+avaliacao(6, 37, 2).
+avaliacao(19, 39, 4).
+avaliacao(29, 49, 1).
+avaliacao(10, 9, 1).
+avaliacao(22, 8, 5).
+avaliacao(4, 41, 2).
+avaliacao(21, 30, 3).
+avaliacao(14, 4, 1).
+avaliacao(3, 41, 5).
+avaliacao(7, 46, 5).
+avaliacao(28, 28, 1).
+avaliacao(27, 25, 5).
+avaliacao(4, 5, 2).
+avaliacao(7, 38, 4).
+avaliacao(29, 22, 2).
+avaliacao(7, 4, 5).
+avaliacao(30, 39, 2).
+avaliacao(18, 49, 4).
+avaliacao(27, 23, 3).
+avaliacao(22, 5, 4).
+avaliacao(6, 44, 3).
+avaliacao(28, 47, 3).
+avaliacao(24, 45, 4).
+avaliacao(19, 33, 5).
+avaliacao(25, 26, 4).
+avaliacao(25, 49, 4).
+avaliacao(19, 13, 1).
+avaliacao(17, 8, 5).
+avaliacao(14, 9, 3).
+avaliacao(23, 48, 5).
+avaliacao(21, 20, 1).
+avaliacao(3, 47, 4).
+avaliacao(7, 24, 2).
+avaliacao(22, 50, 2).
+avaliacao(26, 1, 4).
+avaliacao(14, 3, 5).
+avaliacao(24, 7, 4).
+avaliacao(18, 11, 1).
+avaliacao(2, 31, 4).
+avaliacao(9, 28, 4).
+avaliacao(24, 1, 3).
+avaliacao(23, 1, 3).
+avaliacao(4, 3, 5).
+avaliacao(6, 43, 2).
+avaliacao(21, 28, 4).
+avaliacao(3, 48, 3).
+avaliacao(25, 22, 3).
+avaliacao(4, 7, 3).
+avaliacao(6, 5, 4).
+avaliacao(6, 12, 3).
+avaliacao(4, 4, 3).
+avaliacao(30, 29, 1).
+avaliacao(12, 33, 4).
+avaliacao(10, 8, 2).
+avaliacao(8, 2, 4).
+avaliacao(7, 39, 4).
+avaliacao(26, 25, 1).
+avaliacao(14, 37, 4).
+avaliacao(18, 19, 5).
+avaliacao(11, 18, 3).
+avaliacao(8, 16, 3).
+avaliacao(27, 34, 1).
+avaliacao(17, 19, 1).
+avaliacao(2, 40, 4).
+avaliacao(26, 49, 4).
+avaliacao(3, 10, 5).
+avaliacao(23, 11, 4).
+avaliacao(6, 11, 3).
+avaliacao(13, 9, 4).
+avaliacao(19, 16, 3).
+avaliacao(15, 10, 4).
+avaliacao(12, 49, 4).
+avaliacao(11, 27, 2).
+avaliacao(7, 37, 4).
+avaliacao(18, 9, 2).
+avaliacao(4, 30, 2).
+avaliacao(10, 44, 4).
+avaliacao(20, 19, 1).
+avaliacao(22, 20, 1).
+avaliacao(19, 32, 3).
+avaliacao(20, 25, 1).
+avaliacao(9, 16, 4).
+avaliacao(3, 22, 1).
+avaliacao(7, 1, 3).
+avaliacao(5, 15, 5).
+avaliacao(10, 12, 2).
+avaliacao(16, 48, 1).
+avaliacao(8, 32, 1).
+avaliacao(7, 22, 3).
+avaliacao(26, 42, 4).
+avaliacao(30, 31, 4).
+avaliacao(24, 18, 1).
+avaliacao(21, 3, 2).
+avaliacao(5, 24, 4).
+avaliacao(28, 30, 2).
+avaliacao(26, 24, 2).
+avaliacao(16, 10, 1).
+avaliacao(2, 15, 5).
+avaliacao(22, 4, 4).
+avaliacao(13, 46, 4).
+avaliacao(27, 46, 2).
+avaliacao(25, 45, 1).
+avaliacao(18, 8, 3).
+avaliacao(3, 16, 3).
+avaliacao(18, 48, 1).
+avaliacao(9, 9, 5).
+avaliacao(20, 43, 4).
+avaliacao(9, 33, 1).
+avaliacao(25, 38, 5).
+avaliacao(26, 45, 2).
+avaliacao(12, 22, 4).
+avaliacao(23, 33, 5).
+avaliacao(29, 43, 5).
+avaliacao(7, 14, 5).
+avaliacao(28, 22, 4).
