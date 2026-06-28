@@ -42,3 +42,18 @@ filmes_nao_avaliados(UsuarioID, Filmes) :-
     findall(FilmeID, avaliacao(UsuarioID, FilmeID, _), IdFilmesJaVistos),
     findall(ID, (filme(ID, _, _, _, _, _, _), \+
     member(ID, IdFilmesJaVistos)), Filmes).
+
+%_____ Fase 3
+
+vizinho(UserA, UserB, FilmeComumID) :-
+    avaliacao(UserA, FilmeComumID, NotaA), NotaA >= 4,
+    avaliacao(UserB, FilmeComumID, NotaB), NotaB >= 4,
+    UserA \= UserB.
+
+recomenda(UsuarioID, FilmeTitulo) :-
+    vizinho(UsuarioID, VizinhoID, _),
+    avaliacao(VizinhoID, FilmeCandidatoID, NotaVizinho),
+    NotaVizinho >= 4,
+    filme(FilmeCandidatoID, FilmeTitulo, _, Diretor, _, _, _),
+    \+ avaliacao(UsuarioID, FilmeCandidatoID, _),
+    \+ (avaliacao(UsuarioID, OutroFilmeID, 1), filme(OutroFilmeID, _, _, Diretor, _, _, _)).
