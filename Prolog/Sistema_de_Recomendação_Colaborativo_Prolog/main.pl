@@ -20,3 +20,25 @@ filmes_de_ano_superior(AnoAlvo, Lista) :- findall(Titulo, (filme(_, Titulo, _, _
 notas_do_usuario(UsuarioID, Lista) :-
     findall(Nota, avaliacao(UsuarioID, _, Nota), Lista).
 
+%_____ Fase 2
+
+media_avaliacoes(UsuarioID, Media) :-
+    findall(Nota, avaliacao(UsuarioID, _,Nota), Notas),
+    sum_list(Notas, Soma),
+    length(Notas, Qtd),
+
+    Media is (truncate((Soma / Qtd) * 100) / 100).
+
+usuario_hater(UsuarioID) :-
+    findall(Nota, avaliacao(UsuarioID, _,1), NotasUm),
+    length(NotasUm, QtdUm),
+    
+    findall(Nota, avaliacao(UsuarioID, _,5), NotasDois),
+    length(NotasDois, QtdDois),
+
+    QtdUm > QtdDois.
+
+filmes_nao_avaliados(UsuarioID, Filmes) :-
+    findall(FilmeID, avaliacao(UsuarioID, FilmeID, _), IdFilmesJaVistos),
+    findall(ID, (filme(ID, _, _, _, _, _, _), \+
+    member(ID, IdFilmesJaVistos)), Filmes).
